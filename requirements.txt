@@ -1,0 +1,39 @@
+# ─────────────────────────────────────────────
+#  Smart Security System — Requirements
+#  Python 3.10+  |  CPU-only (no CUDA needed)
+# ─────────────────────────────────────────────
+
+# Vision & Detection
+ultralytics==8.2.18          # YOLOv8 + ByteTrack built-in
+opencv-python==4.9.0.80      # Video I/O and frame processing
+Pillow==10.3.0               # Image utilities
+
+# Face Re-ID (CPU-safe, lightweight)
+insightface==0.7.3           # Face embedding extraction
+onnxruntime==1.18.0          # ONNX backend for insightface (CPU)
+
+# SLM via Ollama (Phi-3-mini runs locally)
+ollama==0.2.1                # Python client for Ollama
+
+# Alerts
+paho-mqtt==2.0.0             # MQTT publisher
+
+# Storage
+# sqlite3 is built into Python — no install needed
+
+# Dashboard
+streamlit==1.35.0
+plotly==5.22.0
+pandas==2.2.2
+
+# Utilities
+numpy==1.26.4
+scipy==1.13.1                # Cosine similarity for face re-ID
+python-dotenv==1.0.1         # Config management
+loguru==0.7.2                # Clean logging
+rich==13.7.1                 # Pretty CLI output
+tqdm==4.66.4                 # Progress bars
+
+# Video download helper (for UCF-Crime samples)
+requests==2.32.2
+gdown==5.2.0                 # Google Drive downloader
