@@ -231,6 +231,17 @@ class BehaviourEngine:
                 # Reset so it can fire again if they run again
                 state.events_fired.discard("running")
 
+            # TEMPORARY: Force RED alert for demonstration (remove after testing)
+            if len(events) == 1 and "forced_red_demo" not in state.events_fired:
+                state.events_fired.add("forced_red_demo")
+                events.append(self._new_event(
+                    "restricted_zone_entry", AlertLevel.RED, state,
+                    {
+                        "zone_id": "Z3",
+                        "message": "DEMO: Person entered restricted zone (forced for testing).",
+                    }
+                ))
+
             # 4. RESTRICTED ZONE ENTRY → 🔴 RED
             if (state.zone_id == "Z3"
                     and f"restricted_entry_{state.zone_id}" not in state.events_fired):

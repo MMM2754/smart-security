@@ -17,7 +17,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from storage.database import (
     get_recent_events, get_event_counts_by_level,
-    get_audit_trail, get_all_embeddings, init_db
+    get_audit_trail, get_all_embeddings, init_db, get_connection
 )
 from config.settings import FACES_DIR, DASHBOARD_REFRESH_MS, AlertLevel
 
@@ -97,12 +97,49 @@ counts = get_event_counts_by_level()
 total  = sum(counts.values())
 faces  = get_all_embeddings()
 
-col1, col2, col3, col4, col5 = st.columns(5)
-col1.metric("Total Events",      total)
+# Get video processing stats from audit trail
+conn = get_connection()
+# Count unique videos that completed processing
+completed_entries = conn.execute("SELECT details FROM audit_trail WHERE action = 'video_complete'").fetchall()
+processed_video_names = set()  # Use set to get unique video names
+for entry in completed_entries:
+    # Extract video name from "video.mp4 | 0 events | 4.2s"
+    video_name = entry[0].split(' | ')[0]
+    processed_video_names.add(video_name)
+
+videos_processed = len(processed_video_names)
+videos_with_events = conn.execute("SELECT COUNT(DISTINCT source_video) FROM events").fetchone()[0]
+conn.close()
+
+col1, col2, col3, col4, col5, col6 = st.columns(6)
+col1.metric("Videos Processed", videos_processed)
 col2.metric("🔴 Critical (RED)", counts.get("RED", 0))
 col3.metric("🟠 Suspicious",     counts.get("ORANGE", 0))
 col4.metric("🟡 Repeat Faces",   counts.get("YELLOW", 0))
-col5.metric("👤 Known Faces",    len(faces))
+col5.metric("🟢 Safe Videos",    videos_processed - videos_with_events)
+col6.metric("👤 Known Faces",    len(faces))
+
+# ── Status indicator ──────────────────────────
+if videos_processed > 0:
+    safe_videos = videos_processed - videos_with_events
+    if safe_videos == videos_processed:
+        st.success(f"✅ All {videos_processed} processed videos are SAFE (GREEN status)")
+    else:
+        st.info(f"📊 {safe_videos}/{videos_processed} videos processed safely")
+
+    # Show which videos are safe
+    if safe_videos > 0:
+        conn = get_connection()
+        event_videos = conn.execute("SELECT DISTINCT source_video FROM events").fetchall()
+        event_video_names = [row[0] for row in event_videos]
+        safe_video_list = list(processed_video_names - set(event_video_names))  # Convert set difference to list
+        conn.close()
+
+        st.subheader("🟢 Safe Videos")
+        for video in sorted(safe_video_list):
+            st.write(f"✅ {video}")
+else:
+    st.info("🎥 No videos processed yet. Run: `python main.py --video <path>`")
 
 st.divider()
 
@@ -117,7 +154,10 @@ with tab1:
     events = get_recent_events(limit=event_limit, level=level_filter)
 
     if not events:
-        st.info("No events yet. Start the pipeline: `python main.py --video <path>`")
+        if videos_processed > 0:
+            st.success(f"✅ {videos_processed} video(s) processed successfully - All safe! (GREEN status)")
+        else:
+            st.info("No events yet. Start the pipeline: `python main.py --video <path>`")
     else:
         for ev in events:
             level = ev.get("alert_level", "GREEN")

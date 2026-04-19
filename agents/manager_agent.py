@@ -133,7 +133,7 @@ class ManagerAgent:
         try:
             client = ollama_client.Client(host=OLLAMA_HOST)
             models = client.list()
-            names  = [m["name"] for m in models.get("models", [])]
+            names  = [m.model for m in models.models]
             if not any(MANAGER_MODEL in n for n in names):
                 logger.warning(
                     f"Manager model '{MANAGER_MODEL}' not found. Using fallback."

@@ -17,10 +17,10 @@ ZONES_PATH      = os.path.join(BASE_DIR, "config", "zones.json")
 
 # ── YOLO ──────────────────────────────────────
 YOLO_MODEL      = "yolov8n.pt"          # nano = fastest on CPU
-YOLO_CONF       = 0.40                   # detection confidence threshold
+YOLO_CONF       = 0.50                   # detection confidence threshold (higher = fewer false positives, faster)
 YOLO_CLASSES    = [0]                    # 0 = person only (keeps it fast)
 YOLO_IMG_SIZE   = 640
-FRAME_SKIP      = 3                      # process every Nth frame (CPU relief)
+FRAME_SKIP      = 5                      # process every Nth frame (increase for faster processing)
 
 # ── ByteTrack (built into Ultralytics) ────────
 TRACK_PERSIST   = True
@@ -29,7 +29,7 @@ TRACK_CONF      = 0.35
 # ── Behaviour Thresholds ──────────────────────
 LOITER_SECONDS          = 30     # person in same zone > 30s = loitering
 RUNNING_SPEED_PX_S      = 120    # pixels/second threshold = running
-CROWD_DENSITY_COUNT     = 5      # >= 5 people in one zone = crowd surge
+CROWD_DENSITY_COUNT     = 2      # >= 2 people in one zone = crowd surge (for testing)
 PERIMETER_MARGIN_PX     = 30     # px from frame edge = perimeter zone
 ABANDONED_FRAMES        = 90     # object stationary for N frames = abandoned
 
@@ -44,7 +44,7 @@ MAX_FACE_DB_SIZE        = 10000        # max embeddings to keep in SQLite
 OLLAMA_HOST             = "http://localhost:11434"
 WORKER_MODEL            = "phi3:mini"   # Worker Agent — JSON → natural language
 MANAGER_MODEL           = "phi3:mini"   # Manager Agent — classification & severity
-OLLAMA_TIMEOUT          = 30            # seconds before timeout
+OLLAMA_TIMEOUT          = 15            # seconds before timeout (reduced for faster failure)
 
 # ── MQTT ──────────────────────────────────────
 MQTT_BROKER             = "localhost"

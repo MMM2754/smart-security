@@ -109,7 +109,7 @@ class WorkerAgent:
         try:
             client = ollama_client.Client(host=OLLAMA_HOST)
             models = client.list()
-            names  = [m["name"] for m in models.get("models", [])]
+            names  = [m.model for m in models.models]
             if not any(WORKER_MODEL in n for n in names):
                 logger.warning(
                     f"Model '{WORKER_MODEL}' not found in Ollama. "

@@ -201,7 +201,8 @@ def process_video(
     cap.release()
     if writer:
         writer.release()
-    cv2.destroyAllWindows()
+    if show_display:
+        cv2.destroyAllWindows()
     mqtt.disconnect()
 
     elapsed = time.time() - t_start

@@ -42,7 +42,7 @@ def _get_face_app():
             _face_app.prepare(ctx_id=-1, det_size=(320, 320))  # small det for speed
             logger.success(f"InsightFace loaded: {FACE_MODEL}")
         except Exception as e:
-            logger.warning(f"InsightFace unavailable: {e}. Face re-ID disabled.")
+            logger.info(f"InsightFace not available: {e}. Face re-ID disabled (optional feature).")
             _face_app = None
     return _face_app
 

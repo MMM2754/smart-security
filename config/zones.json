@@ -1,37 +1,120 @@
 {
   "_comment": "Zones are defined as polygons [x, y] in pixel coordinates. Run tools/zone_drawer.py to set these interactively for your specific camera.",
   "_note": "These are DEFAULTS for a 640x480 frame. Re-draw for your actual video resolution.",
-
   "zones": [
     {
       "id": "Z1",
       "name": "Entry / Exit",
-      "color": [0, 255, 0],
-      "polygon": [[0, 380], [640, 380], [640, 480], [0, 480]],
+      "color": [
+        0,
+        255,
+        0
+      ],
+      "polygon": [
+        [
+          0,
+          380
+        ],
+        [
+          640,
+          380
+        ],
+        [
+          640,
+          480
+        ],
+        [
+          0,
+          480
+        ]
+      ],
       "alert_on_entry": false,
       "loiter_threshold_override": null
     },
     {
       "id": "Z2",
       "name": "Open Area",
-      "color": [255, 165, 0],
-      "polygon": [[80, 150], [560, 150], [560, 380], [80, 380]],
+      "color": [
+        255,
+        165,
+        0
+      ],
+      "polygon": [
+        [
+          80,
+          150
+        ],
+        [
+          560,
+          150
+        ],
+        [
+          560,
+          380
+        ],
+        [
+          80,
+          380
+        ]
+      ],
       "alert_on_entry": false,
       "loiter_threshold_override": null
     },
     {
       "id": "Z3",
       "name": "Restricted Zone",
-      "color": [255, 0, 0],
-      "polygon": [[400, 50], [640, 50], [640, 200], [400, 200]],
+      "color": [
+        255,
+        0,
+        0
+      ],
+      "polygon": [
+        [
+          200,
+          100
+        ],
+        [
+          400,
+          100
+        ],
+        [
+          400,
+          300
+        ],
+        [
+          200,
+          300
+        ]
+      ],
       "alert_on_entry": true,
       "loiter_threshold_override": 5
     },
     {
       "id": "Z4",
       "name": "Perimeter",
-      "color": [128, 0, 128],
-      "polygon": [[0, 0], [640, 0], [640, 50], [0, 50]],
+      "color": [
+        128,
+        0,
+        128
+      ],
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          640,
+          0
+        ],
+        [
+          640,
+          50
+        ],
+        [
+          0,
+          50
+        ]
+      ],
       "alert_on_entry": false,
       "loiter_threshold_override": 15
     }
